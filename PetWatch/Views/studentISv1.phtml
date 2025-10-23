@@ -1,0 +1,30 @@
+<?php require('template/header.phtml') ?>
+
+<div class="row">
+    <div class="col-5">
+        <p><?php echo $view->dbMessage; ?></p>
+    </div>
+    <div class="col-7">
+        <p>Current script <?php echo $_SERVER["PHP_SELF"]; ?></p>
+    </div>
+</div>
+
+<div class="row">
+    <table class="table table-bordered">
+       <thead> <tr> <th>Student ID</th> <th>First name</th> <th>Last name</th> <th>International</th> <th>CourseID</th> </tr>
+       </thead>
+       <tbody>
+
+       <?php foreach ($view->studentsDataSet as $studentData) {
+    echo '<tr> <td>' .   $studentData->getStudentID() .
+         '</td> <td>' . $studentData->getFirstName() .
+         '</td> <td>' . $studentData->getLastName() .
+         '</td> <td>' . $studentData->getInternational() .
+         '</td> <td>' . $studentData->getCourseID() .
+         '</td> </td> </tr>';
+} ?>
+       </tbody>
+    </table>
+
+
+<?php require('template/footer.phtml') ?>
