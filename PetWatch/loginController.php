@@ -9,7 +9,7 @@ require_once("Models/UserDataSet.php");
 if (isset($_POST["loginButton"])) {
     $username = $_POST["userID"];
     $password = $_POST["password"];
-    $gitmworks = false;
+
 
 
     $newDataSet = new UserDataSet();
