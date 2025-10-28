@@ -12,7 +12,15 @@ class PetDataSet {
     }
 
     public function fetchAllpets() {
-        $sqlQuery = 'SELECT * FROM pets;';
+        $sqlQuery = 'SELECT 
+    pets.*, 
+    sightings.comment AS sighting_comment, 
+    sightings.latitude AS sighting_latitude, 
+    sightings.longitude AS sighting_longitude 
+    FROM 
+    pets 
+    LEFT JOIN 
+    sightings ON pets.id = sightings.pet_id;';
 
         $statement = $this->_dbHandle->prepare($sqlQuery); // prepare a PDO statement
         $statement->execute(); // execute the PDO statement

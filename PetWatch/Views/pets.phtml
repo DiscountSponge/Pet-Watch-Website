@@ -1,5 +1,7 @@
 <?php require('template/header.phtml') ?>
 
+
+
 <div class="row">
     <div class="col-5">
 
@@ -14,7 +16,7 @@
 <div class="row"> <!-- Keeping this as it was in table so asssme its important-->
 
     <?php
-    // Outside of div so it doesnt make one big card
+    // Outside  div so it doesn't make one big card
     foreach ($view->petDataSet as $petData) {
         ?>
 
@@ -35,7 +37,7 @@
                     <p class="card-text"><?php echo $petData->getDescription(); ?></p>
                 </div>
 
-                <!-- More bootstrap, puts them into their own little rows -->
+                <!-- Type of card that puts the fields into their own little rows-->
                 <ul class="list-group list-group-flush">
                     <li class="list-group-item">
                         <strong>Status:</strong>
@@ -47,7 +49,7 @@
                             echo 'bg-success';
                         }
                         ?>
-                    "> <!--This bit echoes out the tye of badge to use and he bit below echoes out the actual data-->
+                    "> <!--This bit echoes out the tye of badge to use and the bit below echoes out the actual data-->
                         <?php echo $petData->getStatus(); ?>
                     </span>
                     </li>
@@ -57,15 +59,19 @@
                     <li class="list-group-item"><strong>Date Reported:</strong> <?php echo $petData->getDateReported(); ?></li>
                     <li class="list-group-item"><strong>Pet ID:</strong> <?php echo $petData->getId(); ?></li>
                     <li class="list-group-item"><strong>Owner ID:</strong> <?php echo $petData->getUserId(); ?></li>
+                    <?php if($petData->getComment() != ''): //This will now only output the sightings info if there actually are sightings?>
+                        <li class="list-group-item"><strong>Sightings:</strong> <?php echo $petData->getComment() . "<br>"; ?></li>
+                        <li class="list-group-item"><strong>Location(s):</strong> <?php echo $petData->getLatitude() . "<br>" . $petData->getLongitude() ?></li>
+                    <?php endif;?>
                 </ul>
             </div> <!-- end of card -->
-        </div> <!-- end of col -->
+        </div>
 
         <?php
     }
     ?>
 
-</div> <!-- end of row -->
+</div>
 
 <?php require('template/footer.phtml') ?>
 
