@@ -60,7 +60,7 @@ class PetData {
         return $this->_breed;
     }
 
-    public function getColor() {
+    public function getColour() {
         return $this->_color;
     }
 

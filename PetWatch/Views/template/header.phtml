@@ -16,7 +16,7 @@
     <link href="Views/css/bootstrap-theme.css" rel="stylesheet">
     <link href="Views/css/my-style.css" rel="stylesheet">
 
-    <title>Client Server Systems - <?php echo $view->pageTitle; ?></title>
+    <title>Pet Watch - <?php echo $view->pageTitle; ?></title>
 </head>
 
 <body role="document">
@@ -33,15 +33,31 @@
 
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav mr-auto">
-                <li><a href="loginController.php">Login</a> </li>
-                <li><a href="passwordController.php">Test</a> </li>
-            </ul>
+                <li class="nav-item">
+                    <a class="nav-link text-light" href="loginController.php">Login</a>
+                </li>
 
+                <li class="nav-item">
+                    <a class="nav-link text-light" href="passwordController.php">Test</a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link text-light" href="pets.php">View Pets</a>
+                </li>
+
+
+            </ul>
+            <form class="d-flex">
+                <!-- Stick search here so its an end of navbar-->
+                <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search" name="searchBox">
+                <button class="btn btn-outline-success" type="submit">Search</button>
+            </form>
         </div>
     </nav>
 
 
     <div class="row">
+
         <div class="col-12">
             <h1><?php echo $view->pageTitle ?> </h1>
         </div>

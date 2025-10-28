@@ -2,6 +2,7 @@
 
 <div class="row">
     <div class="col-5">
+        <!-- This variable ($view->dbMessage) comes from your controller -->
         <p><?php echo $view->dbMessage; ?></p>
     </div>
     <div class="col-7">
@@ -10,21 +11,49 @@
 </div>
 
 <div class="row">
-    <table class="table table-bordered">
-       <thead> <tr> <th>Student ID</th> <th>First name</th> <th>Last name</th> <th>International</th> <th>CourseID</th> </tr>
-       </thead>
-       <tbody>
+    <!-- table-responsive makes the table scroll horizontally on small screens -->
+    <div class="table-responsive">
+        <table class="table table-bordered">
+            <!-- Added all headers to match PetData class -->
+            <thead>
+            <tr>
+                <th>Pet ID</th>
+                <th>Name</th>
+                <th>Photo</th> <!-- Added Photo Column -->
+                <th>Species</th>
+                <th>Breed</th> <!-- Added Breed -->
+                <th>Color</th> <!-- Added Color -->
+                <th>Status</th>
+                <th>Description</th>
+                <th>Date Reported</th> <!-- Added Date Reported -->
+                <th>Owner ID</th> <!-- Added User ID -->
+            </tr>
+            </thead>
+            <tbody>
 
-       <?php foreach ($view->studentsDataSet as $studentData) {
-    echo '<tr> <td>' .   $studentData->getStudentID() .
-         '</td> <td>' . $studentData->getFirstName() .
-         '</td> <td>' . $studentData->getLastName() .
-         '</td> <td>' . $studentData->getInternational() .
-         '</td> <td>' . $studentData->getCourseID() .
-         '</td> </td> </tr>';
-} ?>
-       </tbody>
-    </table>
+            <?php
+            foreach ($view->petDataSet as $petData) {
+                // Updated to include all getter methods from PetData
+                echo '<tr> <td>' .   $petData->getId() .
+                        '</td> <td>' . $petData->getName() .
 
+                        // Added Photo: Displaying the image using the URL
+                        // Added style to keep images a consistent size
+                        '</td> <td> <img src="' . $petData->getPhotoUrl() . '" alt="' . $petData->getName() . '" style="width: 100px; height: auto; border-radius: 4px;" onerror="this.style.display=\'none\'"> ' .
+
+                        '</td> <td>' . $petData->getSpecies() .
+                        '</td> <td>' . $petData->getBreed() . // Added getBreed()
+                        '</td> <td>' . $petData->getColor() . // Added getColor()
+                        '</td> f<td>' . $petData->getStatus() .
+                        '</td> <td>' . $petData->getDescription() .
+                        '</td> <td>' . $petData->getDateReported() . // Added getDateReported()
+                        '</td> <td>' . $petData->getUserId() . // Added getUserId()
+                        '</td> </tr>';
+            } ?>
+            </tbody>
+        </table>
+    </div> <!-- end of table-responsive -->
+</div> <!-- Added closing div for the row -->
 
 <?php require('template/footer.phtml') ?>
+

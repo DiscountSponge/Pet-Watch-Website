@@ -1,0 +1,71 @@
+<?php require('template/header.phtml') ?>
+
+<div class="row">
+    <div class="col-5">
+
+        <p><?php echo $view->dbMessage; ?></p>
+    </div>
+    <div class="col-7">
+        <p>Current script <?php echo $_SERVER["PHP_SELF"]; ?></p>
+    </div>
+</div>
+
+<!-- Using cards instead of tables as more responsive-->
+<div class="row"> <!-- Keeping this as it was in table so asssme its important-->
+
+    <?php
+    // Outside of div so it doesnt make one big card
+    foreach ($view->petDataSet as $petData) {
+        ?>
+
+        <!-- Each card will take up 4 columns on medium+ screen  -->
+        <div class="col-md-4 mb-4">
+            <div class="card">
+                <!-- Put picture at top, bootstrap docs -->
+                <img src="Views/images/<?php echo $petData->getPhotoUrl(); ?>"
+                     class="card-img-top"
+                     alt="<?php echo $petData->getName(); ?>"
+                     style="height: 250px; object-fit: cover;"
+                     onerror="this.style.display='none'">
+
+                <div class="card-body">
+
+                    <h5 class="card-title"><?php echo $petData->getName(); ?></h5>
+
+                    <p class="card-text"><?php echo $petData->getDescription(); ?></p>
+                </div>
+
+                <!-- More bootstrap, puts them into their own little rows -->
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item">
+                        <strong>Status:</strong>
+                        <span class="badge
+                        <?php
+                        if ($petData->getStatus() == 'lost') {
+                            echo 'bg-danger';
+                        } else {
+                            echo 'bg-success';
+                        }
+                        ?>
+                    "> <!--This bit echoes out the tye of badge to use and he bit below echoes out the actual data-->
+                        <?php echo $petData->getStatus(); ?>
+                    </span>
+                    </li>
+                    <li class="list-group-item"><strong>Species:</strong> <?php echo $petData->getSpecies(); ?></li>
+                    <li class="list-group-item"><strong>Breed:</strong> <?php echo $petData->getBreed(); ?></li>
+                    <li class="list-group-item"><strong>Colour:</strong> <?php echo $petData->getColour(); ?></li>
+                    <li class="list-group-item"><strong>Date Reported:</strong> <?php echo $petData->getDateReported(); ?></li>
+                    <li class="list-group-item"><strong>Pet ID:</strong> <?php echo $petData->getId(); ?></li>
+                    <li class="list-group-item"><strong>Owner ID:</strong> <?php echo $petData->getUserId(); ?></li>
+                </ul>
+            </div> <!-- end of card -->
+        </div> <!-- end of col -->
+
+        <?php
+    }
+    ?>
+
+</div> <!-- end of row -->
+
+<?php require('template/footer.phtml') ?>
+
