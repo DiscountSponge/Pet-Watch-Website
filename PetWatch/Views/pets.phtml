@@ -4,7 +4,7 @@
 
 <div class="row">
     <div class="col-5">
-
+0
         <p><?php echo $view->dbMessage; ?></p>
     </div>
     <div class="col-7">
@@ -63,6 +63,9 @@
                         <li class="list-group-item"><strong>Sightings:</strong> <?php echo $petData->getComment() . "<br>"; ?></li>
                         <li class="list-group-item"><strong>Location(s):</strong> <?php echo $petData->getLatitude() . "<br>" . $petData->getLongitude() ?></li>
                     <?php endif;?>
+                    <a href="edit_pet_controller.php?pet_id=<?php echo $petData->getId(); ?>" class="btn btn-primary btn-sm">
+                        Edit Pet
+                    </a>
                 </ul>
             </div> <!-- end of card -->
         </div>

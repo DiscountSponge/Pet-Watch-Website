@@ -1,5 +1,6 @@
 
 <?php
+
 $view = new StdClass();
 $view->pageTitle="Login";
 require_once("Views/login.phtml");

@@ -34,6 +34,27 @@ class PetDataSet {
         return $dataSet;
     }
 
+    public function searchPets($searchQuery) {
+
+    $searchStatement = "SELECT 
+        pets.*, 
+        sightings.comment AS sighting_comment, 
+        sightings.latitude AS sighting_latitude, 
+        sightings.longitude AS sighting_longitude 
+        FROM 
+        pets 
+        LEFT JOIN 
+        sightings ON pets.id = sightings.pet_id; WHERE pets.name LIKE '%$searchQuery%';";
+        $statement = $this->_dbHandle->prepare($searchStatement);
+        $statement->execute();
+        $dataSet = [];
+        while ($row = $statement->fetch()) {
+            $dataSet[] = new PetData($row);
+
+        }
+    return $dataSet;
+    }
+
 }
 
 

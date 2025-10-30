@@ -1,29 +1,29 @@
 <?php
-
-// load required classes
 require_once('Models/PetDataSet.php');
 
-// make a view class
 $view = new stdClass();
-$view->pageTitle = 'Browse Pets'; // Changed title to be about pets
+$view->pageTitle = 'Browse Pets';
 
-// create a new pet dataset object that we can generate data from
-$petDataSet = new PetDataSet(); // Changed variable name from $studentsDataSet
+$petDataSet = new PetDataSet();
+$view->petDataSet = $petDataSet->fetchAllPets(); // default list
 
-// Assumes your PetDataSet class has a method called fetchAllPets()
-// Changed view variable from $view->studentsDataSet
-$view->petDataSet = $petDataSet->fetchAllPets();
+if (isset($_GET['searchButton']) && !empty($_GET['searchItem'])) {
+    // Remove HTML and trim spaces
+    $searchQuery = htmlspecialchars(trim($_GET['searchItem']));
 
-// send a results count to the view to show how many results were retrieved
-if (count($view->petDataSet) == 0) // Changed variable
-{
-    $view->dbMessage = "No pets found"; // Made message more specific
+    $view->petDataSet = $petDataSet->searchPets($searchQuery);
+
+    if (count($view->petDataSet) == 0) {
+        $view->dbMessage = "No pets found matching";
+    } else {
+        $view->dbMessage = count($view->petDataSet) . " pet(s) found";
+    }
+} else {
+    if (count($view->petDataSet) == 0) {
+        $view->dbMessage = "No pets found in database.";
+    } else {
+        $view->dbMessage = count($view->petDataSet) . " pet(s) available.";
+    }
 }
-else
-{
-    // Changed variable and made message more specific
-    $view->dbMessage = count($view->petDataSet) . " pet(s) found";
-}
 
-// include the view
-require_once('Views/pets.phtml'); // Changed from studentISv1.phtml
+require_once("views/pets.phtml");

@@ -1,4 +1,5 @@
 <?php
+session_start();
 require_once ("Database.php");
 require_once ("User.php");
 
@@ -6,7 +7,7 @@ class UserDataSet {
     protected $_dbHandle, $_dbInstance;
 
     public function __construct() {
-        session_start();
+
         $this->_dbInstance = Database::getInstance();
         $this->_dbHandle = $this->_dbInstance->getdbConnection();
 
@@ -34,8 +35,8 @@ class UserDataSet {
         $row = $statement->fetch();
         if($row) {
             if ($password == $row['password_hash']) {
-                $_SESSION['Username'] = $row['username'];
-                $_SESSION['UserID'] = $row['id'];
+                $_SESSION['username'] = $row['username'];
+                $_SESSION['userType'] = $row['role'];
                 return true;
             }
         }
