@@ -48,6 +48,13 @@
 
 
             </ul>
+            <?php if(isset($_SESSION['username'])): ?>
+                <ul class="navbar-nav me-3"> <li class="nav-item">
+                        <a class="nav-link text-light" href="logout.php">Logout</a>
+                    </li>
+                </ul>
+            <?php endif ;?>
+
             <form class="d-flex" action="pets.php" method="get">
                 <!-- Stick search here so it's at end of navbar-->
                 <input class="form-control me-2" type="text" placeholder="Search" aria-label="Search" name="searchItem">

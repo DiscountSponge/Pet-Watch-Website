@@ -37,6 +37,7 @@ class UserDataSet {
             if ($password == $row['password_hash']) {
                 $_SESSION['username'] = $row['username'];
                 $_SESSION['userType'] = $row['role'];
+                $_SESSION['user_id'] = $row['id'];
                 return true;
             }
         }

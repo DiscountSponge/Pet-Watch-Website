@@ -1,4 +1,7 @@
-<?php require('template/header.phtml') ?>
+<?php
+session_start();
+require('template/header.phtml');
+?>
 
 
 
@@ -63,9 +66,21 @@
                         <li class="list-group-item"><strong>Sightings:</strong> <?php echo $petData->getComment() . "<br>"; ?></li>
                         <li class="list-group-item"><strong>Location(s):</strong> <?php echo $petData->getLatitude() . "<br>" . $petData->getLongitude() ?></li>
                     <?php endif;?>
-                    <a href="edit_pet_controller.php?pet_id=<?php echo $petData->getId(); ?>" class="btn btn-primary btn-sm">
-                        Edit Pet
-                    </a>
+                    <?php if(isset($_SESSION["userType"])): ?>
+                        <a href="edit_pet_controller.php?pet_id=<?php echo $petData->getId(); ?>" class="btn btn-outline-info btn-sm">
+                            Report Sighting Of Pet
+                        </a>
+                    <?php endif;?>
+                    <?php if(isset($_SESSION["user_id"]) && $_SESSION["user_id"] == $petData->getUserId()):  //wrap what i want it to do with an ifset so it doesnt throw an error?>
+                        <a href="edit_pet_controller.php?pet_id=<?php echo $petData->getId(); ?>" class="btn btn-outline-warning btn-sm">
+                            Edit Pet
+                        </a>
+
+                        <a href="edit_pet_controller.php?pet_id=<?php echo $petData->getId(); ?>" class="btn btn-outline-danger btn-sm">
+                            Delete Pet
+                        </a>
+                    <?php endif;?>
+
                 </ul>
             </div> <!-- end of card -->
         </div>
@@ -76,5 +91,5 @@
 
 </div>
 
-<?php require('template/footer.phtml') ?>
+<?php require('template/footer.phtml'); ?>
 
