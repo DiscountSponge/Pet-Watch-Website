@@ -1,11 +1,11 @@
 <?php
 
-require_once ('Database.php');
+require_once('Database.php');
 require_once('PetData.php');
 
 class PetDataSet {
     protected $_dbHandle, $_dbInstance;
-        
+
     public function __construct() {
         $this->_dbInstance = Database::getInstance();
         $this->_dbHandle = $this->_dbInstance->getdbConnection();
@@ -13,21 +13,20 @@ class PetDataSet {
 
     public function fetchAllpets() {
         $sqlQuery = 'SELECT 
-    pets.*, 
-    sightings.comment AS sighting_comment, 
-    sightings.latitude AS sighting_latitude, 
-    sightings.longitude AS sighting_longitude 
-    FROM 
-    pets 
-    LEFT JOIN 
-    sightings ON pets.id = sightings.pet_id;';
+            pets.*, 
+            sightings.comment AS sighting_comment, 
+            sightings.latitude AS sighting_latitude, 
+            sightings.longitude AS sighting_longitude 
+        FROM 
+            pets 
+        LEFT JOIN 
+            sightings ON pets.id = sightings.pet_id
+        ;';
 
-        $statement = $this->_dbHandle->prepare($sqlQuery); // prepare a PDO statement
-        $statement->execute(); // execute the PDO statement
+        $statement = $this->_dbHandle->prepare($sqlQuery);
+        $statement->execute();
 
         $dataSet = [];
-        // loop through and read the results of the query and cast
-        // them into a matching object
         while ($row = $statement->fetch()) {
             $dataSet[] = new PetData($row);
         }
@@ -51,7 +50,7 @@ class PetDataSet {
             pets.breed LIKE :searchQuery
         OR 
             pets.species LIKE :searchQuery
-    ";
+        ";
 
         $statement = $this->_dbHandle->prepare($sql);
         $statement->bindValue(':searchQuery', '%' . $searchQuery . '%', PDO::PARAM_STR);
@@ -65,7 +64,13 @@ class PetDataSet {
         return $dataSet;
     }
 
+    public function updatePet($name, $status, $species, $breed, $colour, $dateReported, $description, $photo_url, $pet_id) {
+        // Update pet record safely using prepared statements
+        $sqlQuery = 'UPDATE pets 
+                     SET name=?, status=?, species=?, breed=?, color=?, date_reported=?, description=?, photo_url=? 
+                     WHERE id=?';
 
+        $statement = $this->_dbHandle->prepare($sqlQuery);
+        $statement->execute([$name, $status, $species, $breed, $colour, $dateReported, $description, $photo_url, $pet_id]);
+    }
 }
-
-

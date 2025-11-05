@@ -1,0 +1,144 @@
+<?php require("Views/template/header.phtml"); ?>
+    <!--Used the "Checkout" bootstrap example to build this page-->
+    <div class="row g-3 justify-content-center">
+        <div class="col-lg-8">
+
+            <h4 class="mb-3">Report a Pet</h4>
+
+            <form class="needs-validation" action="editPet.php" method="post" enctype="multipart/form-data" novalidate><!--Needs for form uploads-->
+                <div class="row g-3">
+
+                    <div class="col-sm-6">
+                        <label for="petName" class="form-label">Pet's Name</label>
+                        <input
+                            type="text"
+                            class="form-control"
+                            id="petName"
+                            name="petName"
+                            placeholder=""
+                            value=""
+                            required
+                        />
+                        <div class="invalid-feedback">A name is required.</div>
+                    </div>
+
+                    <div class="col-sm-6">
+                        <label for="status" class="form-label">Status</label>
+                        <select class="form-select" id="status" name="status" required>
+                            <option value="">Choose...</option>
+                            <option value="lost">Lost</option>
+                            <option value="found">Found</option>
+                        </select>
+                        <div class="invalid-feedback">Please select a status.</div>
+                    </div>
+
+                    <div class="col-sm-6">
+                        <label for="species" class="form-label">Species</label>
+                        <input
+                            type="text"
+                            class="form-control"
+                            id="species"
+                            name="species"
+                            placeholder="e.g., Dog, Cat, Rabbit"
+                            required
+                        />
+                        <div class="invalid-feedback">
+                            Please enter a species.
+                        </div>
+                    </div>
+
+                    <div class="col-sm-6">
+                        <label for="breed" class="form-label"
+                        >Breed</label>
+
+                        <input
+                            type="text"
+                            class="form-control"
+                            id="breed"
+                            name="breed"
+                            placeholder="e.g., Golden Retriever"
+                            required
+                        />
+                        <div class="invalid-feedback">
+                            Please enter a Breed.
+                        </div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <label for="colour" class="form-label"
+                        >Colour
+                        </label>
+
+                        <input
+                            type="text"
+                            class="form-control"
+                            id="colour"
+                            name="colour"
+                            placeholder=""
+                            value = "<?php echo $view->colour; ?>"
+                            required
+                        />
+                        <div class="invalid-feedback">
+                            Please enter a colour.
+                        </div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <label for="dateReported" class="form-label">Date Lost/Found</label>
+                        <input
+                            type="date"
+                            class="form-control"
+                            id="dateReported"
+                            name="dateReported"
+                            value="<?php echo $view->dateReported; ?>"
+                            required
+                        />
+                        <div class="invalid-feedback">A valid date is required.</div> <!-- Bootstrap stuff that makes it require entry-->
+                    </div>
+
+                    <div class="col-12">
+                        <label for="description" class="form-label"
+                        >Description
+                        </label>
+
+                        <textarea
+                            class="form-control"
+                            id="description"
+                            name="description"
+                            rows="4"
+                            placeholder="<?php echo $view->description; ?>"
+                            required
+                        ></textarea>
+                        <div class="invalid-feedback">
+                            Please enter a Description.
+                        </div>
+                    </div>
+
+                    <div class="col-12">
+                        <label for="petPhoto" class="form-label"
+                        >Photo
+                        </label>
+                        <input
+                            type="file"
+                            class="form-control"
+                            id="petPhoto"
+                            name="petPhoto"
+                            required
+                        />
+                        <div class="invalid-feedback">
+                            Please upload a photo.
+                        </div>
+                    </div>
+
+                </div>
+
+                <hr class="my-4" />
+
+                <button class="w-100 btn btn-primary btn-lg" type="submit">
+                    Edit Pet Report
+                </button>
+            </form>
+        </div>
+    </div>
+
+<?php require("Views/template/footer.phtml"); ?>

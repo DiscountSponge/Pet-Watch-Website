@@ -30,7 +30,7 @@ require('template/header.phtml');
                 <img src="Views/images/<?php echo $petData->getPhotoUrl(); ?>"
                      class="card-img-top"
                      alt="<?php echo $petData->getName(); ?>"
-                     style="height: 250px; object-fit: cover;"
+                     style="height: 250px; width=250px; object-fit: cover;"
                      onerror="this.style.display='none'">
 
                 <div class="card-body">
@@ -71,10 +71,31 @@ require('template/header.phtml');
                             Report Sighting Of Pet
                         </a>
                     <?php endif;?>
-                    <?php if(isset($_SESSION["user_id"]) && $_SESSION["user_id"] == $petData->getUserId()):  //wrap what i want it to do with an ifset so it doesnt throw an error?>
-                        <a href="edit_pet_controller.php?pet_id=<?php echo $petData->getId(); ?>" class="btn btn-outline-warning btn-sm">
-                            Edit Pet
-                        </a>
+                    <?php if(isset($_SESSION["user_id"]) && $_SESSION["user_id"] == $petData->getUserId()): ?>
+                    <?php
+                    // 1. Create an array of all the pet's data
+                        $petQueryData = [
+                                'pet_id' => $petData->getId(),
+                                'name' => $petData->getName(),
+                                'status' => $petData->getStatus(),
+                                'species' => $petData->getSpecies(),
+                                'breed' => $petData->getBreed(),
+                                'colour' => $petData->getColour(),
+                                'date_reported' => $petData->getDateReported(),
+                                'description' => $petData->getDescription(),
+                                'photo_url' => $petData->getPhotoUrl(),
+                                'user_id' => $petData->getUserId()
+                        ];
+
+                        // 2. http_build_query() automatically URL-encodes everything for you
+                        $queryString = http_build_query($petQueryData);
+                        ?>
+
+                    <!-- 3. Add the full query string to the href -->
+                    <a href="editPet.php?<?php echo $queryString; ?>" class="btn btn-outline-warning btn-sm">
+                        Edit Pet
+                    </a>
+
 
                         <a href="edit_pet_controller.php?pet_id=<?php echo $petData->getId(); ?>" class="btn btn-outline-danger btn-sm">
                             Delete Pet

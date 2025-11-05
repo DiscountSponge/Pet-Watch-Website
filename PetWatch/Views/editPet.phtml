@@ -1,0 +1,110 @@
+<?php require("Views/template/header.phtml"); ?>
+<!--Used the "Checkout" bootstrap example to build this page-->
+<div class="row g-3 justify-content-center">
+    <div class="col-lg-8">
+
+        <h4 class="mb-3">Report a Pet</h4>
+
+        <form action="editPet.php" method="post" enctype="multipart/form-data">
+            <input type="hidden" name="pet_id" value="<?php echo $view->pet_id; ?>">
+            <input type="hidden" name="existing_photo" value="<?php echo $view->photo_url; ?>">
+
+            <div class="row g-3">
+
+                <div class="col-sm-6">
+                    <label for="petName" class="form-label">Pet's Name</label>
+                    <input
+                            type="text"
+                            class="form-control"
+                            id="petName"
+                            name="petName"
+                            value="<?php echo $view->name; ?>"
+                    />
+                </div>
+
+                <div class="col-sm-6">
+                    <label for="status" class="form-label">Status</label>
+                    <select class="form-select" id="status" name="status">
+                        <option value="">Choose...</option>
+                        <option value="lost"<?php if ($view->status == 'lost') echo 'selected'; ?>>Lost</option>
+                        <option value="found"<?php if ($view->status == 'found') echo 'selected'; ?>>Found</option>
+                    </select>
+                </div>
+
+                <div class="col-sm-6">
+                    <label for="species" class="form-label">Species</label>
+                    <input
+                            type="text"
+                            class="form-control"
+                            id="species"
+                            name="species"
+                            value="<?php echo $view->species; ?>"
+                    />
+                </div>
+
+                <div class="col-sm-6">
+                    <label for="breed" class="form-label">Breed</label>
+                    <input
+                            type="text"
+                            class="form-control"
+                            id="breed"
+                            name="breed"
+                            value="<?php echo $view->breed; ?>"
+                    />
+                </div>
+
+                <div class="col-md-6">
+                    <label for="colour" class="form-label">Colour</label>
+                    <input
+                            type="text"
+                            class="form-control"
+                            id="colour"
+                            name="colour"
+                            value="<?php echo $view->colour; ?>"
+                    />
+                </div>
+
+                <div class="col-md-6">
+                    <label for="dateReported" class="form-label">Date Lost/Found</label>
+                    <input
+                            type="date"
+                            class="form-control"
+                            id="dateReported"
+                            name="dateReported"
+                            value="<?php echo $view->date_reported; ?>"
+                    />
+                </div>
+
+                <div class="col-12">
+                    <label for="description" class="form-label">Description</label>
+                    <textarea
+                            class="form-control"
+                            id="description"
+                            name="description"
+                            rows="4"
+                    ><?php echo $view->description; ?></textarea>
+                </div>
+
+                <div class="col-12">
+                    <label for="petPhoto" class="form-label">Photo</label>
+                    <input
+                            type="file"
+                            class="form-control"
+                            id="petPhoto"
+                            name="petPhoto"
+                            value="<?php echo $view->photo_url; ?>"
+                    />
+                </div>
+
+            </div>
+
+            <hr class="my-4" />
+
+            <button class="w-100 btn btn-primary btn-lg" type="submit" name="edit">
+                Edit Pet Report
+            </button>
+        </form>
+    </div>
+</div>
+
+<?php require("Views/template/footer.phtml"); ?>
