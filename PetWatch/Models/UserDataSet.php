@@ -29,7 +29,7 @@ class UserDataSet {
     }
     public function checkUser($username, $password): bool //phpstorm made me add bool here who knows why but it works
     {
-        $query = 'SELECT * FROM users WHERE id = ?;';
+        $query = 'SELECT * FROM users WHERE username = ?;';
         $statement = $this->_dbHandle->prepare($query);
         $statement->execute([$username]);
         $row = $statement->fetch();

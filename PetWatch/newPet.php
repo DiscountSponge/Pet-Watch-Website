@@ -1,23 +1,6 @@
 <?php
-$view = new stdClass();
-$view->pageTitle = 'Edit Pet Report';
-require_once('Models/PetDataSet.php');
-
-if (isset($_GET['pet_id'])) {
-    $view->pet_id= (int)($_GET['pet_id']);
-    $view->name = $_GET['name'];
-    $view->status = $_GET['status'];
-    $view->species = $_GET['species'];
-    $view->breed = $_GET['breed'];
-    $view->colour = $_GET['colour'];
-    $view->date_reported = $_GET['date_reported'];
-    $view->description = $_GET['description'];
-    $view->photo_url = $_GET['photo_url'];
-
-
-}
-
-// ✅ HANDLE FORM SUBMISSION FIRST
+$view = new StdClass();
+$view->pageTitle = "Adding Pet";
 if (isset($_POST['edit'])) {
     $pet_id = $_POST['pet_id'];
     $name = trim($_POST['petName']);
@@ -54,16 +37,8 @@ if (isset($_POST['edit'])) {
 
     // ✅ Update pet in DB
     $petData = new PetDataSet();
-    $check =$petData->updatePet($name, $status, $species, $breed, $colour, $dateReported, $description, $photo_url, $pet_id);
-    if(!$check){
-        $_SESSION["message"] = "Error updating database. Please ensure all fields are filled";
-    }else{
-        header("Location:pets.php");
-        exit;
-    }
+    $petData->insertPet($name, $status, $species, $breed, $colour, $dateReported, $description, $photo_url, $user_id);
 
 
 }
-
-// ✅ Only load view when NOT posting
-require_once('Views/editPet.phtml');
+require_once("Views/newPet.phtml");

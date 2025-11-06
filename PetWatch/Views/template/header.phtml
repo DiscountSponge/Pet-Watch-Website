@@ -31,9 +31,11 @@
 
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav mr-auto">
+                <?php if(!isset($_SESSION['username'])): ?>
                 <li class="nav-item">
                     <a class="nav-link text-light" href="loginController.php">Login</a>
                 </li>
+                <?php endif;?>
 
                 <li class="nav-item">
                     <a class="nav-link text-light" href="passwordController.php">Test</a>
@@ -43,7 +45,7 @@
                     <a class="nav-link text-light" href="pets.php">View Pets</a>
                 </li>
                 <li>
-                    <a class="nav-link text-light" href="editPet.php">Edit Pets</a>
+                    <a class="nav-link text-light" href="newPet.php">Add lost pet</a>
                 </li>
 
 

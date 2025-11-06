@@ -18,6 +18,7 @@ if (isset($_POST['searchButton'])&& !empty($_POST['searchItem'])){ //if the butt
     {
         $view->dbMessage = "No pets found"; // Made message more specific
         header("Location: pets.php");
+        exit;
     }else
     {
         // Changed variable and made message more specific

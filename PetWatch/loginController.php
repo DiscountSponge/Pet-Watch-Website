@@ -5,8 +5,11 @@ $loginMessage ="";
 require_once("Models/UserDataSet.php");
 //$userDataSet = new UserDataSet();
 //$view->studentsDataSet = $userDataSet->checkUser();
+$view = new StdClass();
+$view->pageTitle="Login";
+$view->dbMessage="";
 if (isset($_POST["loginButton"])) {
-    $username = htmlspecialchars($_POST["userID"]);
+    $username = htmlspecialchars($_POST["username"]);
     $password = $_POST["password"]; //Cant use the protection on password in case tge symbols are used in the password
 
 
@@ -20,13 +23,12 @@ if (isset($_POST["loginButton"])) {
     }
 
     else{
-       $loginMessage="Wrong username or password";
+       $view->dbMessage="Wrong username or password";
 
     }
 }
 
-$view = new StdClass();
-$view->pageTitle="Login";
+
 require_once("Views/login.phtml");
 
 

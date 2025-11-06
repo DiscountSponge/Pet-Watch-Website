@@ -64,13 +64,28 @@ class PetDataSet {
         return $dataSet;
     }
 
-    public function updatePet($name, $status, $species, $breed, $colour, $dateReported, $description, $photo_url, $pet_id) {
+    public function updatePet($name, $status, $species, $breed, $colour, $dateReported, $description, $photo_url, $pet_id)
+    {
         // Update pet record safely using prepared statements
-        $sqlQuery = 'UPDATE pets 
+        try {
+            $sqlQuery = 'UPDATE pets 
                      SET name=?, status=?, species=?, breed=?, color=?, date_reported=?, description=?, photo_url=? 
                      WHERE id=?';
 
-        $statement = $this->_dbHandle->prepare($sqlQuery);
-        $statement->execute([$name, $status, $species, $breed, $colour, $dateReported, $description, $photo_url, $pet_id]);
+            $statement = $this->_dbHandle->prepare($sqlQuery);
+            $statement->execute([$name, $status, $species, $breed, $colour, $dateReported, $description, $photo_url, $pet_id]);
+            if ($statement->rowCount() > 0) {
+                return true; // Successfully updated
+            } else {
+                return false; // No rows changed
+            }
+        }catch (PDOException $e) {
+            error_log("Error updating database: " . $e->getMessage());
+            return false;
+        }
+}
+    public function insertPet($name, $status, $species, $breed, $colour, $dateReported, $description, $photo_url, $user_id)
+    {
+
     }
 }

@@ -18,7 +18,6 @@ if (isset($_POST["loginButton"])) {
     if($newDataSet->checkUser($username,$password)){
         $newDataSet->hashPassword();
         header("Location:index.php"); //tells code to open index page if login is succesful
-
         exit();
     }
 

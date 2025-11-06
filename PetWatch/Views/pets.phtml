@@ -1,5 +1,4 @@
 <?php
-session_start();
 require('template/header.phtml');
 ?>
 
@@ -7,7 +6,7 @@ require('template/header.phtml');
 
 <div class="row">
     <div class="col-5">
-0
+
         <p><?php echo $view->dbMessage; ?></p>
     </div>
     <div class="col-7">
@@ -17,6 +16,11 @@ require('template/header.phtml');
 
 <!-- Using cards instead of tables as more responsive-->
 <div class="row"> <!-- Keeping this as it was in table so asssme its important-->
+    <?php if (isset($_SESSION["message"])): ?>
+    <div class="alert alert-warning text-center">
+        <?php echo $_SESSION["message"]; ?>
+    </div>
+    <?php endif; ?>
 
     <?php
     // Outside  div so it doesn't make one big card
@@ -31,7 +35,7 @@ require('template/header.phtml');
                      class="card-img-top"
                      alt="<?php echo $petData->getName(); ?>"
                      style="height: 250px; width=250px; object-fit: cover;"
-                     onerror="this.style.display='none'">
+                     >
 
                 <div class="card-body">
 
