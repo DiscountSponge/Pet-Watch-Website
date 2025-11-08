@@ -1,13 +1,16 @@
-<?php require("Views/template/header.phtml"); ?>
+<?php
+
+require("Views/template/header.phtml");
+?>
 <!--Used the "Checkout" bootstrap example to build this page-->
 <div class="row g-3 justify-content-center">
     <div class="col-lg-8">
 
         <h4 class="mb-3">Report a Pet</h4>
 
-        <form action="editPet.php" method="post" enctype="multipart/form-data">
-            <input type="hidden" name="pet_id" value="<?php $_SESSION['user_id'];?>'] ?>">
-            <input type="hidden" name="existing_photo" value="">
+        <form action="newPet.php" method="post" enctype="multipart/form-data">
+            <input type="hidden" name="user_id" value="<?php echo $_SESSION['user_id']; ?>">
+
 
             <div class="row g-3">
 
@@ -24,9 +27,9 @@
                 <div class="col-sm-6">
                     <label for="status" class="form-label">Status</label>
                     <select class="form-select" id="status" name="status">
-                        <option value="">Choose...</option>
+
                         <option value="lost">Lost</option>
-                        <option value="found">Found</option>
+
                     </select>
                 </div>
 

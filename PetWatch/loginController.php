@@ -23,12 +23,10 @@ if (isset($_POST["loginButton"])) {
     }
 
     else{
-       $view->dbMessage="Wrong username or password";
+        $view->dbMessage="Wrong username or password";
 
     }
 }
 
 
 require_once("Views/login.phtml");
-
-

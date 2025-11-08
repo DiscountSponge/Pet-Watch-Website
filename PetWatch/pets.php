@@ -6,7 +6,24 @@ $view = new stdClass();
 $view->pageTitle = 'Browse Pets';
 
 $petDataSet = new PetDataSet();
-$view->petDataSet = $petDataSet->fetchAllPets(); // default list
+// default list
+
+$resultsPerPage = 10;
+$totalPets= $petDataSet->countPets();
+$totalPages = ceil($totalPets/$resultsPerPage); //rounds result up
+
+if (isset($_GET['page'])) {
+    $page = (int) $_GET['page'];
+}else{
+    $page = 1;
+}
+$page = max(1,min($page,$totalPages)); // ensures user cant just go in and type things that messes up the page, fixes the minimum and maximum number of pages that can go in the url
+$view->page = $page;
+$view->totalPages = $totalPages;
+$start = ($page - 1) * $resultsPerPage;
+$view->petDataSet = $petDataSet->fetchAllPets($resultsPerPage, $start);
+//First item in the database query that it picks up on
+// On the 4th page it picks from 3-1 * 10 so pet/sighting combo no 30
 
 if (isset($_GET['searchButton']) && !empty($_GET['searchItem'])) {
     // Remove HTML and trim spaces
@@ -25,6 +42,13 @@ if (isset($_GET['searchButton']) && !empty($_GET['searchItem'])) {
     } else {
         $view->dbMessage = count($view->petDataSet) . " pet(s) available.";
     }
+}
+
+if(isset($_POST['deletePet']) && !empty($_POST['deletePet'])) {
+    $pet_id = $_POST['deletePet'];
+    $petDataSet->deletePet($pet_id);
+    $_SESSION["message"] = "Pet deleted successfully.";
+
 }
 
 require_once("views/pets.phtml");

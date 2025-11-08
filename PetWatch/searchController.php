@@ -11,8 +11,8 @@ $view->pageTitle = 'Browse Pets'; // Changed title to be about pets
 // create a new pet dataset object that we can generate data from
 $petDataSet = new PetDataSet(); // Changed variable name from $studentsDataSet
 
-if (isset($_POST['searchButton'])&& !empty($_POST['searchItem'])){ //if the button been pressed do all thus
-    $searchQuery = $_POST['searchItem'];
+if (isset( $_POST['searchButton'])&& !empty($_POST['searchItem'])){ //if the button been pressed do all thus
+    $searchQuery = htmlentities($_POST['searchItem']);
     $view->petDataSet=$petDataSet->searchPets($searchQuery);
     if (count($view->petDataSet) == 0) // Changed variable
     {
