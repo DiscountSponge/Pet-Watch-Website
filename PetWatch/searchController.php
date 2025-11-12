@@ -1,40 +1,37 @@
 <?php
 
-// load required classes
+// Could possibly have included in pets.php?
 require_once('Models/PetDataSet.php');
 
 
-// make a view class
 $view = new stdClass();
-$view->pageTitle = 'Browse Pets'; // Changed title to be about pets
 
-// create a new pet dataset object that we can generate data from
-$petDataSet = new PetDataSet(); // Changed variable name from $studentsDataSet
+$petDataSet = new PetDataSet();
 
-if (isset( $_POST['searchButton'])&& !empty($_POST['searchItem'])){ //if the button been pressed do all thus
+if (isset( $_POST['searchButton'])&& !empty($_POST['searchItem'])){
     $searchQuery = htmlentities($_POST['searchItem']);
     $view->petDataSet=$petDataSet->searchPets($searchQuery);
-    if (count($view->petDataSet) == 0) // Changed variable
+    if (count($view->petDataSet) == 0)
     {
-        $view->dbMessage = "No pets found"; // Made message more specific
+        $view->dbMessage = "No pets found";
         header("Location: pets.php");
         exit;
     }else
     {
-        // Changed variable and made message more specific
+
         $view->dbMessage = count($view->petDataSet) . " pet(s) found";
     }
-    // include the view
+
     require_once("views/pets.phtml");
 
 
-}else if (count($view->petDataSet) == 0) // Otherwise just show pets
+}else if (count($view->petDataSet) == 0)
 {
-    $view->dbMessage = "No pets found"; // Made message more specific
+    $view->dbMessage = "No pets found";
 }
 else
 {
-    // Changed variable and made message more specific
+
     $view->dbMessage = count($view->petDataSet) . " pet(s) found";
 }
 // include the view

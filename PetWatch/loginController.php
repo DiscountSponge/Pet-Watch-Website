@@ -1,10 +1,9 @@
 
 <?php
-
+error_reporting(E_ALL & ~E_NOTICE); //removes annoying message telling me its ignoring session start
 $loginMessage ="";
 require_once("Models/UserDataSet.php");
-//$userDataSet = new UserDataSet();
-//$view->studentsDataSet = $userDataSet->checkUser();
+
 $view = new StdClass();
 $view->pageTitle="Login";
 $view->dbMessage="";

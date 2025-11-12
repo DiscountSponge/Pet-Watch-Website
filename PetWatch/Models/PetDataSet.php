@@ -28,12 +28,12 @@ class PetDataSet
             pets.date_reported DESC
         LIMIT ? OFFSET ?
     ';
-
+        //LIMIT and OFFSET used for pagination, limits the number of items that are on each page
         $statement = $this->_dbHandle->prepare($sqlQuery);
         $statement->execute([(int)$limit, (int)$offset]);
 
         $dataSet = [];
-        while ($row = $statement->fetch(PDO::FETCH_ASSOC)) {
+        while ($row = $statement->fetch(PDO::FETCH_ASSOC)) { //more pagination stuff
             $dataSet[] = new PetData($row);
         }
 
@@ -41,7 +41,7 @@ class PetDataSet
     }
     public function searchPets($searchQuery)
     {
-        // Convert search query to lowercase
+        // Convert search query to lowercase, will do the same with fields
         $searchQuery = strtolower(trim($searchQuery));
 
         $sqlQuery = "
@@ -59,6 +59,7 @@ class PetDataSet
             OR LOWER(pets.breed) LIKE ? 
             OR LOWER(pets.species) LIKE ?
             OR LOWER(pets.status) LIKE ?
+            OR LOWER(pets.description) LIKE ?
         
     ";
 
@@ -67,8 +68,8 @@ class PetDataSet
 
         $searchTerm = '%' . $searchQuery . '%';
 
-        // Execute with the same lowercase term for all placeholders
-        $statement->execute([$searchTerm, $searchTerm, $searchTerm, $searchTerm]);
+        // Check all fields for search item
+        $statement->execute([$searchTerm, $searchTerm, $searchTerm, $searchTerm, $searchTerm]);
 
         $dataSet = [];
         while ($row = $statement->fetch()) {
@@ -81,7 +82,7 @@ class PetDataSet
 
     public function updatePet($name, $status, $species, $breed, $colour, $dateReported, $description, $photo_url, $pet_id)
     {
-        // Update pet record safely using prepared statements
+
         try {
             $sqlQuery = 'UPDATE pets 
                      SET name=?, status=?, species=?, breed=?, color=?, date_reported=?, description=?, photo_url=? 
@@ -90,9 +91,9 @@ class PetDataSet
             $statement = $this->_dbHandle->prepare($sqlQuery);
             $statement->execute([$name, $status, $species, $breed, $colour, $dateReported, $description, $photo_url, $pet_id]);
             if ($statement->rowCount() > 0) {
-                return true; // Successfully updated
+                return true;
             } else {
-                return false; // No rows changed
+                return false;
             }
         } catch (PDOException $e) {
             error_log("Error updating database: " . $e->getMessage());
@@ -122,6 +123,7 @@ class PetDataSet
         $statement->execute([$pet_id]);
     }
 
+    //nhbbj
     public function countPets(): int
     {
         $sqlQuery = 'SELECT COUNT(id) AS total FROM pets';

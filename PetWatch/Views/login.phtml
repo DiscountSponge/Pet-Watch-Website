@@ -13,7 +13,9 @@
                     </div>
                     <button type="submit" class="btn btn-primary" name="loginButton">Login</button>
                 </form>
-                <?php if (strlen($view->dbMessage)>0): ?>
+                <?php if (strlen($view->dbMessage)>0): // I honestly dont remember why I did it this way
+
+                     ?>
                     <div class="alert alert-danger" role="alert">
                         <p><?php echo $view->dbMessage; ?></p>
                     </div>

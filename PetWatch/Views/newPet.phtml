@@ -7,7 +7,16 @@ require("Views/template/header.phtml");
     <div class="col-lg-8">
 
         <h4 class="mb-3">Report a Pet</h4>
+        <?php
+        if (isset($view->message)){
+        ?>
 
+        <div class="alert alert-primary" role="alert">>
+            <?php echo $view->message; ?> <a href="pets.php" class="alert-link"> View Pets</a>
+        </div>
+        <?php
+        }
+        ?>
         <form action="newPet.php" method="post" enctype="multipart/form-data">
             <input type="hidden" name="user_id" value="<?php echo $_SESSION['user_id']; ?>">
 
@@ -98,7 +107,7 @@ require("Views/template/header.phtml");
             <hr class="my-4" />
 
             <button class="w-100 btn btn-success btn-lg" type="submit" name="add">
-                Submit Lost Pet
+                Add Pet
             </button>
         </form>
     </div>

@@ -2,12 +2,20 @@
 <!--Used the "Checkout" bootstrap example to build this page-->
 <div class="row g-3 justify-content-center">
     <div class="col-lg-8">
-
-        <h4 class="mb-3">Report a Pet</h4>
+        <?php
+        if( isset($view->message)) {
+            ?>
+            <div class="alert alert-primary" role="alert">
+                <?php echo $view->message;?> <a href="pets.php" class="alert-link">Back to pet view</a> <!--Stops rest of page glitching out and also nice way to show success/failure-->
+            </div>
+            <?php
+        }else{
+            ?>
+        <h4 class="mb-3">Edit <?php echo $view->name; ?></h4>
 
         <form action="editPet.php" method="post" enctype="multipart/form-data">
-            <input type="hidden" name="pet_id" value="<?php echo $view->pet_id; ?>">
-            <input type="hidden" name="existing_photo" value="<?php echo $view->photo_url; ?>">
+            <input type="hidden" name="pet_id" value="<?php echo $view->pet_id; ?>"> <!--Still passes the data i need-->
+            <input type="hidden" name="existing_photo" value="<?php echo $view->photo_url; ?>"> <!--dont lose pic-->
 
             <div class="row g-3">
 
@@ -20,6 +28,7 @@
                             name="petName"
                             value="<?php echo $view->name; ?>"
                     />
+                    <!--I used a query string to pass data and this echoes the values passed in the query string so that the user cant lose it-->
                 </div>
 
                 <div class="col-sm-6">
@@ -101,9 +110,13 @@
             <hr class="my-4" />
 
             <button class="w-100 btn btn-primary btn-lg" type="submit" name="edit">
-                Edit Pet Report
+                Edit Pet
             </button>
         </form>
+        <?php
+        }
+
+        ?>
     </div>
 </div>
 

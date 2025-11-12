@@ -1,4 +1,5 @@
 <?php
+
 require('template/header.phtml');
 ?>
 
@@ -9,16 +10,14 @@ require('template/header.phtml');
 
         <p><?php echo $view->dbMessage; ?></p>
     </div>
-    <div class="col-7">
-        <p>Current script <?php echo $_SERVER["PHP_SELF"]; ?></p>
-    </div>
+
 </div>
 
 <!-- Using cards instead of table since i like how it looks-->
-<div class="row"> <!-- Keeping this as it was in table so asssme its important-->
-    <?php if (isset($_SESSION["message"])): ?>
+<div class="row">
+    <?php if (isset($view->message)): ?>
     <div class="alert alert-warning text-center">
-        <?php echo $_SESSION["message"]; ?>
+        <p> <?php echo $view->message; ?> </p>
     </div>
     <?php endif; ?>
 
@@ -56,7 +55,7 @@ require('template/header.phtml');
                             echo 'bg-success';
                         }
                         ?>
-                    "> <!--This bit echoes out the tye of badge to use and the bit below echoes out the actual data-->
+                    "> <!--This bit echoes out the type of badge to use and the bit below echoes out the actual data-->
                         <?php echo htmlspecialchars($petData->getStatus()); ?>
                     </span>
                     </li>
@@ -91,11 +90,13 @@ require('template/header.phtml');
                                 'user_id' => $petData->getUserId()
                         ];
 
-                        // 2. http_build_query() automatically URL-encodes everything for you
+                        // makes the actual query string, done this way
+                        // to echo out information into input boxes in edit page so that
+                        // the information that isnt changed can just go back into the table
                         $queryString = http_build_query($petQueryData);
                         ?>
 
-                    <!-- 3. Add the full query string to the href -->
+
                     <a href="editPet.php?<?php echo $queryString; ?>" class="btn btn-outline-warning btn-sm">
                         Edit Pet
                     </a>
@@ -135,55 +136,61 @@ require('template/header.phtml');
                     <?php endif;?>
 
                 </ul>
-            </div> <!-- end of card -->
+            </div>
         </div>
 
         <?php
     }
     ?>
-    <nav aria-label="Page navigation">
-        <ul class="pagination justify-content-center">
+    <div>
 
-            <!-- Previous button -->
-            <?php if ($view->page > 1): ?>
-                <li class="page-item">
-                    <a class="page-link" href="?page=<?php echo $view->page - 1; ?>">Previous</a>
-                </li>
-            <?php else: ?>
-                <li class="page-item disabled">
-                    <span class="page-link">Previous</span>
-                </li>
-            <?php endif; ?>
+    </div>
+
+</div>
+<!--Pagination -->
+<div class="row">
+    <div class="col-12">
+        <nav aria-label="Page navigation">
+            <ul class="pagination justify-content-center">
 
 
-            <!-- Page number links -->
-            <?php for ($i = 1; $i <= $view->totalPages; $i++): ?>
-                <li class="page-item <?php echo ($i == $view->page) ? 'active' : ''; ?>">
-                    <a class="page-link" href="?page=<?php echo $i; ?>">
-                        <?php echo $i; ?>
-                    </a>
-                </li>
-            <?php endfor; ?>
+                <?php if ($view->page > 1): ?>
+                    <li class="page-item">
+                        <a class="page-link" href="?page=<?php echo $view->page - 1; ?>">Previous</a>
+                    </li>
+                <?php else: ?>
+                    <li class="page-item disabled">
+                        <span class="page-link">Previous</span>
+                    </li>
+                <?php endif; ?>
 
 
-            <!-- Next button -->
-            <?php if ($view->page < $view->totalPages): ?>
-                <li class="page-item">
-                    <a class="page-link" href="?page=<?php echo $view->page + 1; ?>">Next</a>
-                </li>
-            <?php else: ?>
-                <li class="page-item disabled">
-                    <span class="page-link">Next</span>
-                </li>
-            <?php endif; ?>
+                <?php for ($i = 1; $i <= $view->totalPages; $i++): ?>
+                    <li class="page-item <?php echo ($i == $view->page) ? 'active' : ''; ?>">
+                        <a class="page-link" href="?page=<?php echo $i; ?>">
+                            <?php echo $i; ?>
+                        </a>
+                    </li>
+                <?php endfor; ?>
 
-        </ul>
-    </nav>
 
+                <?php if ($view->page < $view->totalPages): ?>
+                    <li class="page-item">
+                        <a class="page-link" href="?page=<?php echo $view->page + 1; ?>">Next</a>
+                    </li>
+                <?php else: ?>
+                    <li class="page-item disabled">
+                        <span class="page-link">Next</span>
+                    </li>
+                <?php endif; ?>
+
+            </ul>
+        </nav>
+    </div>
 </div>
 
 
-</div>
+
 
 <?php require('template/footer.phtml'); ?>
 

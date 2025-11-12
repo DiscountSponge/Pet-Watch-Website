@@ -3,6 +3,7 @@ $view = new stdClass();
 $view->pageTitle = 'Edit Pet Report';
 require_once('Models/PetDataSet.php');
 
+//for echoing
 if (isset($_GET['pet_id'])) {
     $view->pet_id= (int)($_GET['pet_id']);
     $view->name = $_GET['name'];
@@ -17,7 +18,7 @@ if (isset($_GET['pet_id'])) {
 
 }
 
-// ✅ HANDLE FORM SUBMISSION FIRST
+//actually sending back to db
 if (isset($_POST['edit'])) {
     $pet_id = $_POST['pet_id'];
     $name = trim($_POST['petName']);
@@ -30,7 +31,7 @@ if (isset($_POST['edit'])) {
 
 
     $photo_url =trim($_POST['existing_photo']);
-    // ✅ Fixed upload handling
+
     if (isset($_FILES['petPhoto']) && $_FILES['petPhoto']['error'] === UPLOAD_ERR_OK) {
         $uploadDir = __DIR__ . '\\Views\\images\\';
         $fileTmpPath = $_FILES['petPhoto']['tmp_name'];
@@ -52,18 +53,28 @@ if (isset($_POST['edit'])) {
         }
     }
 
-    // ✅ Update pet in DB
+
     $petData = new PetDataSet();
-    $check =$petData->updatePet($name, $status, $species, $breed, $colour, $dateReported, $description, $photo_url, $pet_id);
-    if(!$check){
-        $_SESSION["message"] = "Error updating database. Please ensure all fields are filled";
+    if (!empty($name) && strlen($name) <50 &&
+        !empty($status) && !empty($species)  && !empty($dateReported) && !empty($photo_url)) {
+        $check =$petData->updatePet($name, $status, $species, $breed, $colour, $dateReported, $description, $photo_url, $pet_id);
+        if(!$check){
+            $view->message = "Error updating database. Please ensure all fields are filled";
+
+        }else{
+            $view->message = "Pet updated successfully";
+
+        }
     }else{
-        header("Location:pets.php");
-        exit;
+        $view->message = "Error updating database. Please ensure all fields are filled";
+
     }
+
+
+
 
 
 }
 
-// ✅ Only load view when NOT posting
+
 require_once('Views/editPet.phtml');

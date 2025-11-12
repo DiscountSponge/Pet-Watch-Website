@@ -33,8 +33,10 @@ class UserDataSet {
         $statement = $this->_dbHandle->prepare($query);
         $statement->execute([$username]);
         $row = $statement->fetch();
+
         if($row) {
-            if ($password == $row['password_hash']) {
+            //hash entered password and compare
+            if (password_verify($password, $row['password_hash'])) {
                 $_SESSION['username'] = $row['username'];
                 $_SESSION['userType'] = $row['role'];
                 $_SESSION['user_id'] = $row['id'];
@@ -43,5 +45,6 @@ class UserDataSet {
         }
         return false;
     }
+
 
 }

@@ -1,15 +1,5 @@
 <?php
-/**
- * Class PetData
- *
- * This class models the data for a single pet within the petWatch system.
- * It uses protected fields for data encapsulation, ensuring that the data
- * from the database is properly structured within an object.
- *
- * The constructor accepts a database row (as an associative array) and assigns
- * its values to the class's properties. This is a fundamental part of the Model
- * [cite_start]in the MVC pattern[cite: 2].
- */
+
 class PetData {
 
     // Protected properties corresponding to the 'pets' table columns.
@@ -18,7 +8,7 @@ class PetData {
     /**
      * Constructor for the PetData class.
      *
-     * @param array $dbRow An associative array representing a single row from the pets database table.
+     * @param array $dbRow //Modifies from students version we were given
      */
     public function __construct($dbRow) {
         $this->_id = $dbRow['id'];
@@ -29,7 +19,7 @@ class PetData {
         $this->_photo_url = $dbRow['photo_url'];
 
 
-        // Sets the status to 'lost' or 'found' using the requested if/else structure.
+
         if ($dbRow['status'] == 'lost') {
             $this->_status = 'lost';
         } else {
@@ -44,10 +34,7 @@ class PetData {
         $this->_sighting_latitude = $dbRow['sighting_latitude'];
     }
 
-    /**
-     * Accessor methods (getters) for all pet properties.
-     * These methods are used by the View to display the pet's information.
-     */
+ 
     public function getId() {
         return $this->_id;
     }

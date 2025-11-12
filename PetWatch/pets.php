@@ -26,7 +26,7 @@ $view->petDataSet = $petDataSet->fetchAllPets($resultsPerPage, $start);
 // On the 4th page it picks from 3-1 * 10 so pet/sighting combo no 30
 
 if (isset($_GET['searchButton']) && !empty($_GET['searchItem'])) {
-    // Remove HTML and trim spaces
+
     $searchQuery = htmlspecialchars(trim($_GET['searchItem']));
 
     $view->petDataSet = $petDataSet->searchPets($searchQuery);
@@ -47,7 +47,9 @@ if (isset($_GET['searchButton']) && !empty($_GET['searchItem'])) {
 if(isset($_POST['deletePet']) && !empty($_POST['deletePet'])) {
     $pet_id = $_POST['deletePet'];
     $petDataSet->deletePet($pet_id);
-    $_SESSION["message"] = "Pet deleted successfully.";
+    header('Location:pets.php', $view->message = "Pet deleted successfully."); //need header to refresh page, session wont work?
+    //sending $view->message make the success message popup, shouldnt be possible to fail unless
+    //theres a connection issue i assume
 
 }
 
