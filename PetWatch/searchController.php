@@ -1,7 +1,7 @@
 <?php
 
 // Could possibly have included in pets.php?
-require_once('Models/PetDataSet.php');
+require_once( __DIR__ . '/Models/PetDataSet.php');
 
 
 $view = new stdClass();
@@ -35,7 +35,7 @@ else
     $view->dbMessage = count($view->petDataSet) . " pet(s) found";
 }
 // include the view
-require_once("views/pets.phtml");
+require_once(__DIR__ . "/Views/pets.phtml");
 
 
 

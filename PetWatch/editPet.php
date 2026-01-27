@@ -1,7 +1,7 @@
 <?php
 $view = new stdClass();
 $view->pageTitle = 'Edit Pet Report';
-require_once('Models/PetDataSet.php');
+require_once( __DIR__ . "/Models/PetDataSet.php");
 
 //for echoing
 if (isset($_GET['pet_id'])) {
@@ -77,4 +77,4 @@ if (isset($_POST['edit'])) {
 }
 
 
-require_once('Views/editPet.phtml');
+require_once(__DIR__ . '/Views/editPet.phtml');

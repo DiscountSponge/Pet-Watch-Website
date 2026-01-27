@@ -2,7 +2,7 @@
 <?php
 error_reporting(E_ALL & ~E_NOTICE); //removes annoying message telling me its ignoring session start
 $loginMessage ="";
-require_once("Models/UserDataSet.php");
+require_once( __DIR__ . "/Models/UserDataSet.php");
 
 $view = new StdClass();
 $view->pageTitle="Login";
@@ -28,4 +28,4 @@ if (isset($_POST["loginButton"])) {
 }
 
 
-require_once("Views/login.phtml");
+require_once(__DIR__ . "/Views/login.phtml");

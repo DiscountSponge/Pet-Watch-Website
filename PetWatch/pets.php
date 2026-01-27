@@ -1,6 +1,6 @@
 <?php
 
-require_once('Models/PetDataSet.php');
+require_once( __DIR__ . '/Models/PetDataSet.php');
 
 $view = new stdClass();
 $view->pageTitle = 'Browse Pets';
@@ -53,4 +53,4 @@ if(isset($_POST['deletePet']) && !empty($_POST['deletePet'])) {
 
 }
 
-require_once("views/pets.phtml");
+require_once( __DIR__ . "/Views/pets.phtml");

@@ -16,7 +16,7 @@ class Database {
      */
     public static function getInstance() {
 
-       if(self::$_dbInstance === null) { //checks if the PDO exists
+        if(self::$_dbInstance === null) { //checks if the PDO exists
             // creates new instance if not, sending in connection info
             self::$_dbInstance = new self();
         }
@@ -24,12 +24,12 @@ class Database {
     }
 
     private function __construct() {
-        try { 
-             $this->_dbHandle = new PDO("sqlite:petwatch.sqlite");
+        try {
+            $this->_dbHandle = new PDO("sqlite:petwatch.sqlite");
         }
         catch (PDOException $e) { // catch any failure to connect to the database
-	    echo $e->getMessage();
-	}
+            echo $e->getMessage();
+        }
     }
 
     /**

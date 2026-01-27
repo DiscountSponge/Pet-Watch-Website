@@ -1,9 +1,9 @@
 <?php
 
 
-require_once('Models/PetDataSet.php');
+require_once(__DIR__ . '/Models/PetDataSet.php');
 
 $view = new stdClass();
 $view->pageTitle = 'Pet Watch';
 
-require_once('Views/page1.phtml');
+require_once(__DIR__ . '/Views/page1.phtml');

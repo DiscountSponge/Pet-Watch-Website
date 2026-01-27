@@ -2,7 +2,7 @@
 
 $view = new StdClass();
 $view->pageTitle = "Adding Pet";
-require ("Models/PetDataSet.php");
+require (__DIR__ . "/Models/PetDataSet.php");
 
 if (isset($_POST['add'])) {
     $user_id = $_POST['user_id'];
