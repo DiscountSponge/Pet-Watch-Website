@@ -15,30 +15,40 @@ class PetDataSet
 
     public function fetchAllPets($limit, $offset)
     {
-        $sqlQuery = 'SELECT 
+        // Added aliases (AS) so the keys match what your PetData constructor expects
+        $sqlQuery = '
+        SELECT 
             pets.*, 
-            sightings.comment AS sighting_comment, 
-            sightings.latitude AS sighting_latitude, 
-            sightings.longitude AS sighting_longitude 
-        FROM 
-            pets 
-        LEFT JOIN 
-            sightings ON pets.id = sightings.pet_id
-        ORDER BY 
-            pets.date_reported DESC
-        LIMIT ? OFFSET ?
+            s.comment AS sighting_comment, 
+            s.latitude AS sighting_latitude, 
+            s.longitude AS sighting_longitude 
+        FROM pets 
+        LEFT JOIN (
+            SELECT pet_id, MAX(timestamp) as latest_time
+            FROM sightings
+            GROUP BY pet_id
+        ) latest ON pets.id = latest.pet_id
+        LEFT JOIN sightings s ON s.pet_id = latest.pet_id AND s.timestamp = latest.latest_time
+        ORDER BY pets.date_reported DESC
+        LIMIT :limit OFFSET :offset
     ';
-        //LIMIT and OFFSET used for pagination, limits the number of items that are on each page
+
         $statement = $this->_dbHandle->prepare($sqlQuery);
-        $statement->execute([(int)$limit, (int)$offset]);
+
+        // Bind as Integers - required for MySQL LIMIT/OFFSET when emulation is off
+        $statement->bindValue(':limit', (int)$limit, PDO::PARAM_INT);
+        $statement->bindValue(':offset', (int)$offset, PDO::PARAM_INT);
+
+        $statement->execute();
 
         $dataSet = [];
-        while ($row = $statement->fetch(PDO::FETCH_ASSOC)) { //more pagination stuff
+        // Use FETCH_ASSOC to ensure we get a clean array for the PetData constructor
+        while ($row = $statement->fetch(PDO::FETCH_ASSOC)) {
             $dataSet[] = new PetData($row);
         }
-
         return $dataSet;
     }
+
     public function searchPets($searchQuery)
     {
         // Convert search query to lowercase, will do the same with fields
@@ -47,24 +57,26 @@ class PetDataSet
         $sqlQuery = "
         SELECT 
             pets.*, 
-            sightings.comment AS sighting_comment, 
-            sightings.latitude AS sighting_latitude, 
-            sightings.longitude AS sighting_longitude 
-        FROM 
-            pets 
-        LEFT JOIN 
-            sightings ON pets.id = sightings.pet_id
+            s.comment AS sighting_comment, 
+            s.latitude AS sighting_latitude, 
+            s.longitude AS sighting_longitude 
+        FROM pets 
+        LEFT JOIN (
+            SELECT pet_id, MAX(timestamp) as latest_time
+            FROM sightings
+            GROUP BY pet_id
+        ) latest ON pets.id = latest.pet_id
+        LEFT JOIN sightings s ON s.pet_id = latest.pet_id AND s.timestamp = latest.latest_time
         WHERE 
-            LOWER(pets.name) LIKE ? 
-            OR LOWER(pets.breed) LIKE ? 
-            OR LOWER(pets.species) LIKE ?
-            OR LOWER(pets.status) LIKE ?
-            OR LOWER(pets.description) LIKE ?
-        
+            pets.name LIKE ? 
+            OR pets.breed LIKE ? 
+            OR pets.species LIKE ?
+            OR pets.status LIKE ?
+            OR pets.description LIKE ?
+        ORDER BY pets.date_reported DESC
     ";
 
         $statement = $this->_dbHandle->prepare($sqlQuery);
-
 
         $searchTerm = '%' . $searchQuery . '%';
 
@@ -72,12 +84,18 @@ class PetDataSet
         $statement->execute([$searchTerm, $searchTerm, $searchTerm, $searchTerm, $searchTerm]);
 
         $dataSet = [];
-        while ($row = $statement->fetch()) {
+        // (Added FETCH_ASSOC here so it matches the clean array logic of fetchAllPets)
+        while ($row = $statement->fetch(PDO::FETCH_ASSOC)) {
             $dataSet[] = new PetData($row);
         }
 
         return $dataSet;
     }
+
+
+
+
+
 
 
     public function updatePet($name, $status, $species, $breed, $colour, $dateReported, $description, $photo_url, $pet_id)

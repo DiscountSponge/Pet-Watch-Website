@@ -8,7 +8,7 @@ $view->pageTitle = 'Browse Pets';
 $petDataSet = new PetDataSet();
 // default list
 
-$resultsPerPage = 10;
+$resultsPerPage = 80;
 $totalPets= $petDataSet->countPets();
 $totalPages = ceil($totalPets/$resultsPerPage); //rounds result up
 

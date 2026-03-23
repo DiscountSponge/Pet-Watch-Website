@@ -1,45 +1,45 @@
 <?php
 
 class Database {
-    /**
-     * @var Database
-     */
     protected static $_dbInstance = null;
-
-    /**
-     * @var PDO
-     */
     protected $_dbHandle;
 
-    /**
-     * @return Database
-     */
     public static function getInstance() {
-
-        if(self::$_dbInstance === null) { //checks if the PDO exists
-            // creates new instance if not, sending in connection info
+        if(self::$_dbInstance === null) {
             self::$_dbInstance = new self();
         }
         return self::$_dbInstance;
     }
 
     private function __construct() {
+        // Use 127.0.0.1 to force TCP (essential for SSH tunnels on many systems)
+        $host = '127.0.0.1';
+        $dbName = 'sge969';
+        $port = 3306;
+        $user = 'sge969';
+        $pass = '2mOzm3m7W58CrZS';
+
         try {
-            $this->_dbHandle = new PDO("sqlite:petwatch.sqlite");
+            // FIX 1: Assign to $this->_dbHandle so the class property is actually set
+            $this->_dbHandle = new PDO(
+                "mysql:host=$host;dbname=$dbName;port=$port;charset=utf8mb4",
+                $user,
+                $pass,
+                [PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION]
+            );
         }
-        catch (PDOException $e) { // catch any failure to connect to the database
-            echo $e->getMessage();
+        catch (PDOException $e) {
+            // If the connection fails here, your program cannot continue
+            die("Database Connection Error: " . $e->getMessage());
         }
     }
 
-    /**
-     * @return PDO
-     */
     public function getdbConnection() {
-        return $this->_dbHandle; // returns the PDO handle to be used                                        elsewhere
+        // This will now return the property we successfully set in the constructor
+        return $this->_dbHandle;
     }
 
     public function __destruct() {
-        $this->_dbHandle = null; // destroys the PDO handle when nolonger needed                                        longer needed
+        $this->_dbHandle = null;
     }
 }

@@ -2,192 +2,191 @@
 
 
 
-<div class="row">
-    <div class="col-5">
+    <div class="row">
+        <div class="col-5">
 
-        <p><?php echo $view->dbMessage; ?></p>
-    </div>
-
-</div>
-
-<!-- Using cards instead of table since i like how it looks-->
-<div class="row">
-    <?php if (isset($view->message)): ?>
-    <div class="alert alert-warning text-center">
-        <p> <?php echo $view->message; ?> </p>
-    </div>
-    <?php endif; ?>
-
-    <?php
-    // Outside  div so it doesn't make one big card
-    foreach ($view->petDataSet as $petData) {
-        ?>
-
-        <!-- Each card will take up 4 columns on medium+ screen  -->
-        <div class="col-md-4 mb-4">
-            <div class="card">
-                <!-- Put picture at top, bootstrap docs -->
-                <img src="Views/images/<?php echo htmlspecialchars($petData->getPhotoUrl()); ?>"
-                     class="card-img-top"
-                     alt="<?php echo htmlspecialchars($petData->getName()); ?>"
-                     style="height: 250px; width=250px; object-fit: cover;"
-                     >
-
-                <div class="card-body">
-
-                    <h5 class="card-title"><?php echo htmlspecialchars($petData->getName()); ?></h5>
-
-                    <p class="card-text"><?php echo htmlspecialchars($petData->getDescription()); ?></p>
-                </div>
-
-                <!-- Type of card that puts the fields into their own little rows-->
-                <ul class="list-group list-group-flush">
-                    <li class="list-group-item">
-                        <strong>Status:</strong>
-                        <span class="badge
-                        <?php
-                        if ($petData->getStatus() == 'lost') {
-                            echo 'bg-danger';
-                        } else {
-                            echo 'bg-success';
-                        }
-                        ?>
-                    "> <!--This bit echoes out the type of badge to use and the bit below echoes out the actual data-->
-                        <?php echo htmlspecialchars($petData->getStatus()); ?>
-                    </span>
-                    </li>
-                    <li class="list-group-item"><strong>Species:</strong> <?php echo htmlspecialchars($petData->getSpecies()); ?></li>
-                    <li class="list-group-item"><strong>Breed:</strong> <?php echo htmlspecialchars($petData->getBreed()); ?></li>
-                    <li class="list-group-item"><strong>Colour:</strong> <?php echo htmlspecialchars($petData->getColour()); ?></li>
-                    <li class="list-group-item"><strong>Date Reported:</strong> <?php echo htmlspecialchars($petData->getDateReported()); ?></li>
-                    <li class="list-group-item"><strong>Pet ID:</strong> <?php echo htmlspecialchars($petData->getId()); ?></li>
-                   <!--Removed echo for owner ID as was unnecssary -->
-                    <?php if($petData->getComment() != ''): //This will now only output the sightings info if there actually are sightings?>
-                        <li class="list-group-item"><strong>Sightings:</strong> <?php echo htmlspecialchars($petData->getComment()) . "<br>"; ?></li>
-                        <li class="list-group-item"><strong>Location(s):</strong> <?php echo htmlspecialchars($petData->getLatitude()) . "<br>" . $petData->getLongitude() ?></li>
-                    <?php endif;?>
-                    <?php if(isset($_SESSION["userType"])): ?>
-                        <a href="#" class="btn btn-outline-info btn-sm">
-                            Report Sighting Of Pet
-                        </a>
-                    <?php endif;?>
-                    <?php if(isset($_SESSION["user_id"]) && $_SESSION["user_id"] == $petData->getUserId()): ?>
-                    <?php
-                    // 1. Create an array of all the pet's data
-                        $petQueryData = [
-                                'pet_id' => $petData->getId(),
-                                'name' => $petData->getName(),
-                                'status' => $petData->getStatus(),
-                                'species' => $petData->getSpecies(),
-                                'breed' => $petData->getBreed(),
-                                'colour' => $petData->getColour(),
-                                'date_reported' => $petData->getDateReported(),
-                                'description' => $petData->getDescription(),
-                                'photo_url' => $petData->getPhotoUrl(),
-                                'user_id' => $petData->getUserId()
-                        ];
-
-                        // makes the actual query string, done this way
-                        // to echo out information into input boxes in edit page so that
-                        // the information that isnt changed can just go back into the table
-                        $queryString = http_build_query($petQueryData);
-                        ?>
-
-
-                    <a href="editPet.php?<?php echo $queryString; ?>" class="btn btn-outline-warning btn-sm">
-                        Edit Pet
-                    </a>
-
-
-                        <!-- Using Modal To Delete Pet -->
-                        <button type="submit" class="btn btn-outline-danger btn-sm" data-toggle="modal" data-target="#exampleModalCenter">
-                            Delete Pet
-                        </button>
-
-                        <!-- Modal -->
-                        <form action="pets.php" method="post">
-                        <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-                            <div class="modal-dialog modal-dialog-centered" role="document">
-                                <div class="modal-content">
-                                    <div class="modal-header">
-                                        <h5 class="modal-title" id="exampleModalLongTitle">Deleting Pet</h5>
-                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                            <span aria-hidden="true">&times;</span>
-                                        </button>
-                                    </div>
-                                    <div class="modal-body">
-                                        Are you sure you want to delete this pet?
-                                    </div>
-                                    <div class="modal-footer">
-                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                                        <button type="submit" class="btn btn-danger" name="deletePet" value="<?php echo $petData->getId(); ?>">
-                                            <a href="pets.php"></a>
-                                            Delete
-                                        </button>
-
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        </form>
-                    <?php endif;?>
-
-                </ul>
-            </div>
+            <p><?php echo $view->dbMessage; ?></p>
         </div>
 
+    </div>
+
+    <div class="row" id="liveContent" style="display: none;">
+    </div>
+    <div class="row" id="regularContent" >
+        <?php if (isset($view->message)): ?>
+            <div class="alert alert-warning text-center">
+                <p> <?php echo $view->message; ?> </p>
+            </div>
+        <?php endif; ?>
+
         <?php
-    }
-    ?>
-    <div>
+        // Outside  div so it doesn't make one big card
+        foreach ($view->petDataSet as $petData) {
+            ?>
+
+            <div class="col-md-4 mb-4">
+                <div class="card" >
+                    <img src="Views/images/<?php echo htmlspecialchars($petData->getPhotoUrl()); ?>"
+                         class="card-img-top"
+                         alt="<?php echo htmlspecialchars($petData->getName()); ?>"
+                         style="height: 250px; width=250px; object-fit: cover;"
+                    >
+
+                    <div class="card-body">
+
+                        <h5 class="card-title"><?php echo htmlspecialchars($petData->getName()); ?></h5>
+
+                        <p class="card-text"><?php echo htmlspecialchars($petData->getDescription()); ?></p>
+                    </div>
+
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item">
+                            <strong>Status:</strong>
+                            <span class="badge
+                        <?php
+                            if ($petData->getStatus() == 'lost') {
+                                echo 'bg-danger';
+                            } else {
+                                echo 'bg-success';
+                            }
+                            ?>
+                    "> <?php echo htmlspecialchars($petData->getStatus()); ?>
+                    </span>
+                        </li>
+                        <li class="list-group-item"><strong>Species:</strong> <?php echo htmlspecialchars($petData->getSpecies()); ?></li>
+                        <li class="list-group-item"><strong>Breed:</strong> <?php echo htmlspecialchars($petData->getBreed()); ?></li>
+                        <li class="list-group-item"><strong>Colour:</strong> <?php echo htmlspecialchars($petData->getColour()); ?></li>
+                        <li class="list-group-item"><strong>Date Reported:</strong> <?php echo htmlspecialchars($petData->getDateReported()); ?></li>
+                        <li class="list-group-item"><strong>Pet ID:</strong> <?php echo htmlspecialchars($petData->getId()); ?></li>
+                        <?php if($petData->getComment() != ''): //This will now only output the sightings info if there actually are sightings?>
+                            <li class="list-group-item"><strong>Sightings:</strong> <?php echo htmlspecialchars($petData->getComment()) . "<br>"; ?></li>
+                            <li class="list-group-item"><strong>Location(s):</strong> <?php echo htmlspecialchars($petData->getLatitude()) . "<br>" . $petData->getLongitude() ?></li>
+                        <?php endif;?>
+                        <?php if(isset($_SESSION["userType"])): ?>
+                            <a href="#" class="btn btn-outline-info btn-sm">
+                                Report Sighting Of Pet
+                            </a>
+                        <?php endif;?>
+                        <?php if(isset($_SESSION["user_id"]) && $_SESSION["user_id"] == $petData->getUserId()): ?>
+                            <?php
+                            // 1. Create an array of all the pet's data
+                            $petQueryData = [
+                                    'pet_id' => $petData->getId(),
+                                    'name' => $petData->getName(),
+                                    'status' => $petData->getStatus(),
+                                    'species' => $petData->getSpecies(),
+                                    'breed' => $petData->getBreed(),
+                                    'colour' => $petData->getColour(),
+                                    'date_reported' => $petData->getDateReported(),
+                                    'description' => $petData->getDescription(),
+                                    'photo_url' => $petData->getPhotoUrl(),
+                                    'user_id' => $petData->getUserId()
+                            ];
+
+                            // makes the actual query string, done this way
+                            // to echo out information into input boxes in edit page so that
+                            // the information that isnt changed can just go back into the table
+                            $queryString = http_build_query($petQueryData);
+                            ?>
+
+
+                            <a href="editPet.php?<?php echo $queryString; ?>" class="btn btn-outline-warning btn-sm">
+                                Edit Pet
+                            </a>
+
+
+                            <button type="submit" class="btn btn-outline-danger btn-sm" data-toggle="modal" data-target="#exampleModalCenter">
+                                Delete Pet
+                            </button>
+
+                            <form action="pets.php" method="post">
+                                <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                                    <div class="modal-dialog modal-dialog-centered" role="document">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title" id="exampleModalLongTitle">Deleting Pet</h5>
+                                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                    <span aria-hidden="true">&times;</span>
+                                                </button>
+                                            </div>
+                                            <div class="modal-body">
+                                                Are you sure you want to delete this pet?
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                                <button type="submit" class="btn btn-danger" name="deletePet" value="<?php echo $petData->getId(); ?>">
+                                                    <a href="pets.php"></a>
+                                                    Delete
+                                                </button>
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                        <?php endif;?>
+
+                    </ul>
+                </div>
+            </div>
+
+            <?php
+        }
+        ?>
+        <div>
+
+        </div>
 
     </div>
 
-</div>
-<!--Pagination -->
-<div class="row">
-    <div class="col-12">
-        <nav aria-label="Page navigation">
-            <ul class="pagination justify-content-center">
+    <div class="row">
+        <div class="col-12">
+            <nav aria-label="Page navigation">
+                <ul class="pagination justify-content-center flex-wrap mt-4">
 
+                    <?php
+                    // How many page links to show on either side of the current page
+                    $adjacents = 2;
 
-                <?php if ($view->page > 1): ?>
-                    <li class="page-item">
-                        <a class="page-link" href="?page=<?php echo $view->page - 1; ?>">Previous</a>
-                    </li>
-                <?php else: ?>
-                    <li class="page-item disabled">
-                        <span class="page-link">Previous</span>
-                    </li>
-                <?php endif; ?>
+                    // 1. PREVIOUS BUTTON
+                    if ($view->page > 1) {
+                        echo '<li class="page-item"><a class="page-link" href="?page=' . ($view->page - 1) . '">Previous</a></li>';
+                    } else {
+                        echo '<li class="page-item disabled"><a class="page-link" href="#" tabindex="-1">Previous</a></li>';
+                    }
 
+                    // 2. NUMBERED PAGES WITH ELLIPSES
+                    for ($i = 1; $i <= $view->totalPages; $i++) {
+                        // Only render the button IF it's the first page, the last page, or right next to the current page
+                        if ($i == 1 || $i == $view->totalPages || ($i >= $view->page - $adjacents && $i <= $view->page + $adjacents)) {
 
-                <?php for ($i = 1; $i <= $view->totalPages; $i++): ?>
-                    <li class="page-item <?php echo ($i == $view->page) ? 'active' : ''; ?>">
-                        <a class="page-link" href="?page=<?php echo $i; ?>">
-                            <?php echo $i; ?>
-                        </a>
-                    </li>
-                <?php endfor; ?>
+                            if ($i == $view->page) {
+                                echo '<li class="page-item active"><span class="page-link">' . $i . '</span></li>';
+                            } else {
+                                echo '<li class="page-item"><a class="page-link" href="?page=' . $i . '">' . $i . '</a></li>';
+                            }
 
+                        }
+                        // If the loop is exactly one step outside our "window", print the dots
+                        elseif ($i == $view->page - $adjacents - 1 || $i == $view->page + $adjacents + 1) {
+                            echo '<li class="page-item disabled"><span class="page-link" style="border: none; background: transparent;">...</span></li>';
+                        }
+                    }
 
-                <?php if ($view->page < $view->totalPages): ?>
-                    <li class="page-item">
-                        <a class="page-link" href="?page=<?php echo $view->page + 1; ?>">Next</a>
-                    </li>
-                <?php else: ?>
-                    <li class="page-item disabled">
-                        <span class="page-link">Next</span>
-                    </li>
-                <?php endif; ?>
+                    // 3. NEXT BUTTON
+                    if ($view->page < $view->totalPages) {
+                        echo '<li class="page-item"><a class="page-link" href="?page=' . ($view->page + 1) . '">Next</a></li>';
+                    } else {
+                        echo '<li class="page-item disabled"><a class="page-link" href="#" tabindex="-1">Next</a></li>';
+                    }
+                    ?>
 
-            </ul>
-        </nav>
+                </ul>
+            </nav>
+        </div>
     </div>
-</div>
 
 
 
 
 <?php require('template/footer.phtml'); ?>
-
