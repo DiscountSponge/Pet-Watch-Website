@@ -51,7 +51,9 @@ class PetDataSet
 
     public function searchPets($searchQuery)
     {
+
         // Convert search query to lowercase, will do the same with fields
+        $searchQuery = strip_tags($searchQuery);
         $searchQuery = strtolower(trim($searchQuery));
 
         $sqlQuery = "
@@ -93,11 +95,6 @@ class PetDataSet
     }
 
 
-
-
-
-
-
     public function updatePet($name, $status, $species, $breed, $colour, $dateReported, $description, $photo_url, $pet_id)
     {
 
@@ -135,10 +132,15 @@ class PetDataSet
         }
     }
 
-    public function deletePet($pet_id){
+    public function deletePet($pet_id)
+    {
+
+        $sqlSightings = "DELETE FROM sightings WHERE pet_id = ?";
+        $stmtSightings = $this->_dbHandle->prepare($sqlSightings);
+        $stmtSightings->execute([(int)$pet_id]);
         $sqlQuery = 'DELETE FROM pets WHERE id=?';
         $statement = $this->_dbHandle->prepare($sqlQuery);
-        $statement->execute([$pet_id]);
+        $statement->execute([(int)$pet_id]);
     }
 
     //nhbbj
@@ -150,6 +152,16 @@ class PetDataSet
         $row = $statement->fetch(PDO::FETCH_ASSOC);
         return (int)$row['total'];
     }
+
+    public function fetchPetById($pet_id){
+        $sqlQuery = 'SELECT * FROM pets WHERE id=?';
+        $statement = $this->_dbHandle->prepare($sqlQuery);
+        $statement->execute([$pet_id]);
+        $row = $statement->fetch(PDO::FETCH_ASSOC);
+        return new PetData($row);
+    }
+
+
 
 }
 

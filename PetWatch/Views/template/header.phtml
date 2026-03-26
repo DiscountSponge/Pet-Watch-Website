@@ -5,13 +5,9 @@ if (session_status() === PHP_SESSION_NONE) {
 }
 
 // Making sure only 1 is created
-if (empty($_SESSION["ajaxToken"])) {
-    // Random_bytes > Md5
-    $_SESSION["ajaxToken"] = bin2hex(random_bytes(32));
-}
 
-// 3. Save it to a variable so the HTML below can echo it easily
-$token = $_SESSION["ajaxToken"];
+
+$token = $_SESSION["csrf_token"] ?? '';
 ?>
 <!doctype html>
 <html lang="en">
@@ -40,20 +36,31 @@ $token = $_SESSION["ajaxToken"];
     <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster/dist/MarkerCluster.css" />
     <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster/dist/MarkerCluster.Default.css" />
     <script src="https://unpkg.com/leaflet.markercluster/dist/leaflet.markercluster.js"></script>
+    <script>
+
+
+    </script>
 
     <title>Pet Watch - <?php echo $view->pageTitle; ?></title>
 </head>
 
 <body role="document">
 
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark ">
-    <div class="container-fluid" >
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <div class="container-fluid">
         <a class="navbar-brand" href="index.php">Home</a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
 
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
+<!--            Will be used for permission check-->
+        <div id="sessionData" style="display: none;"
+             data-first="<?php echo $_SESSION['user_id'] ?? null; ?>"
+             data-second="<?php echo $_SESSION['userType'] ?? null; ?>">
+        </div>
+
+
             <ul class="navbar-nav mr-auto">
                 <?php if(!isset($_SESSION['username'])): ?>
                     <li class="nav-item">
@@ -61,33 +68,30 @@ $token = $_SESSION["ajaxToken"];
                     </li>
                 <?php endif;?>
 
-
                 <li class="nav-item">
                     <a class="nav-link text-light" href="pets.php">View Pets</a>
                 </li>
                 <li>
                     <a class="nav-link text-light" href="map.php">Sightings Map</a>
                 </li>
-                <?php if (isset($_SESSION['userType']) && $_SESSION['userType']=="owner"): ?>
+                <?php if (isset($_SESSION['userType']) && $_SESSION['userType'] == "owner"): ?>
                     <li>
                         <a class="nav-link text-light" href="newPet.php">Add lost pet</a>
                     </li>
                 <?php endif;?>
-
-
             </ul>
+
             <?php if(isset($_SESSION['username'])): ?>
-                <ul class="navbar-nav me-3">
+                <ul class="navbar-nav mr-3 me-3">
                     <li class="nav-item">
                         <a class="nav-link text-light" href="logout.php">Logout</a>
                     </li>
                 </ul>
             <?php endif ;?>
 
-
-            <form class="d-flex" action="pets.php" method="get">
-                <input class="form-control me-2" type="text" placeholder="Search" aria-label="Search" name="searchItem" onkeyup="liveSearch.handleSearch(this.value)"> <!-- Live search calling function-->
-                <button class="btn btn-outline-success" type="submit" name="searchButton" value="submit">Search</button>
+            <form class="d-flex form-inline my-2 my-lg-0" action="pets.php" method="get">
+                <input class="form-control mr-sm-2 me-2" type="text" placeholder="Search" aria-label="Search" name="searchItem" onkeyup="liveSearch.handleSearch(this.value)" onclick="liveSearch.handleSearch(this.value)">
+                <button class="btn btn-outline-success my-2 my-sm-0" type="submit" name="searchButton" value="submit">Search</button>
             </form>
 
         </div>

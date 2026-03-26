@@ -20,7 +20,7 @@ class Database {
         $pass = '2mOzm3m7W58CrZS';
 
         try {
-            // FIX 1: Assign to $this->_dbHandle so the class property is actually set
+
             $this->_dbHandle = new PDO(
                 "mysql:host=$host;dbname=$dbName;port=$port;charset=utf8mb4",
                 $user,
@@ -29,7 +29,7 @@ class Database {
             );
         }
         catch (PDOException $e) {
-            // If the connection fails here, your program cannot continue
+            // If the connection fails here,program cannot continue
             die("Database Connection Error: " . $e->getMessage());
         }
     }
